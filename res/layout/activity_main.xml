@@ -14,22 +14,39 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:map="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/map"
+  android:id="@+id/map_container"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:layout_margin="5dp"
-  class="com.google.android.gms.maps.SupportMapFragment"
-  map:cameraBearing="112.5"
-  map:cameraTargetLat="47.367"
-  map:cameraTargetLng="8.5500"
-  map:cameraTilt="0"
-  map:cameraZoom="13"
-  map:mapType="normal"
-  map:uiCompass="false"
-  map:uiRotateGestures="false"
-  map:uiScrollGestures="true"
-  map:uiTiltGestures="true"
-  map:uiZoomControls="false"
-  map:uiZoomGestures="true"/>
+  android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/input_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPostalAddress"
+        android:hint="@string/address_hint"
+        android:imeOptions="actionDone" >
+    </EditText>
+
+	<fragment
+	  android:id="@+id/map"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_margin="5dp"
+	  class="com.google.android.gms.maps.SupportMapFragment"
+	  map:cameraBearing="112.5"
+	  map:cameraTargetLat="47.367"
+	  map:cameraTargetLng="8.5500"
+	  map:cameraTilt="0"
+	  map:cameraZoom="13"
+	  map:mapType="normal"
+	  map:uiCompass="false"
+	  map:uiRotateGestures="false"
+	  map:uiScrollGestures="true"
+	  map:uiTiltGestures="true"
+	  map:uiZoomControls="false"
+	  map:uiZoomGestures="true"/>
+</LinearLayout>
