@@ -20,8 +20,17 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
+    <AutoCompleteTextView
+        android:id="@+id/input_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPostalAddress"
+        android:hint="@string/address_hint"
+        android:imeOptions="actionDone" />
+    
 
-    <EditText
+    <!--<EditText
         android:id="@+id/input_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +38,7 @@
         android:inputType="textPostalAddress"
         android:hint="@string/address_hint"
         android:imeOptions="actionDone" >
-    </EditText>
+    </EditText>-->
 
 	<fragment
 	  android:id="@+id/map"
