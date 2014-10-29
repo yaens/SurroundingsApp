@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -18,17 +16,20 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import ch.yk.android.surroundingsapp.R;
 import ch.yk.android.surroundingsapp.RESTResult.Musikschule;
-import ch.yk.android.surroundingsapp.rest.CallAPI;
+import ch.yk.android.surroundingsapp.obstacleHandler.MusikschuleHandler;
+import ch.yk.android.surroundingsapp.rest.GenericAPICall;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends FragmentActivity implements OnTaskCompleted {
+public class MainActivity extends FragmentActivity {
 
 	private GoogleMap mMap;
 	AutoCompleteTextView autoCompleteTextView;
+	
+	private MapHandler mapHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,26 +92,16 @@ public class MainActivity extends FragmentActivity implements OnTaskCompleted {
 					.findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
-				//setUpMap();
+				this.mapHandler = new MapHandler(mMap);
 			}
 		}
 	}
 
 	private void setUpMap() {
+		
+		MusikschuleHandler msHandler = new MusikschuleHandler(mapHandler);
 
-		new CallAPI(this).execute();
-
-	}
-
-	@Override
-	public void onTaskCompleted(ArrayList<Musikschule> musikschuleResult) {
-
-		for (Musikschule elem : musikschuleResult) {
-			mMap.addMarker(new MarkerOptions().position(
-					new LatLng(elem.getLat(), elem.getLon())).title(
-					elem.getName()));
-		}
+		new GenericAPICall(msHandler).executeAPICall();
 
 	}
-
 }

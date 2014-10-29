@@ -23,13 +23,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import ch.yk.android.surroundingsapp.RESTResult.Musikschule;
+import ch.yk.android.surroundingsapp.RESTResult.Result;
 import ch.yk.android.surroundingsapp.activity.OnTaskCompleted;
 
 public class CallAPI extends AsyncTask<String, String, String> {
 	
 	OnTaskCompleted callBackListener;
-	ArrayList<Musikschule> musikschuleResult = new ArrayList<Musikschule>();
+	ArrayList<JSONObject> resultList = new ArrayList<JSONObject>();
 	
 	public CallAPI(OnTaskCompleted listener){
 		this.callBackListener = listener;
@@ -48,7 +48,6 @@ public class CallAPI extends AsyncTask<String, String, String> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		;
 
 		trustAllHosts();
 		HttpsURLConnection https = null;
@@ -114,17 +113,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
 		for (int i = 0; i < arr.length(); i++)
 		{
 		    try {
-				String lat = arr.getJSONObject(i).getString("lat");
-				String lon = arr.getJSONObject(i).getString("lon");
-				String name = arr.getJSONObject(i).getString("Name");
-				
-				Musikschule ms = new Musikschule();
-				ms.setName(name);
-				ms.setLat(Double.parseDouble(lat));
-				ms.setLon(Double.parseDouble(lon));
-				
-				musikschuleResult.add(ms);
-				
+				resultList.add(arr.getJSONObject(i));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -138,7 +127,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
 	
     protected void onPostExecute(String result){
         // your stuff
-        callBackListener.onTaskCompleted(musikschuleResult);
+        callBackListener.onTaskCompleted(this.resultList);
     }
 	
 	// always verify the host - dont check for certificate
