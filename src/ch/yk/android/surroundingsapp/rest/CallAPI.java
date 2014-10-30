@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -23,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import ch.yk.android.surroundingsapp.RESTResult.Result;
 import ch.yk.android.surroundingsapp.activity.OnTaskCompleted;
 
 public class CallAPI extends AsyncTask<String, String, String> {
@@ -41,9 +42,24 @@ public class CallAPI extends AsyncTask<String, String, String> {
 		InputStream in = null;
 		HttpURLConnection conn = null;
 		URL url = null;
+		String query=params[0];
+		
+		URI uri = null;
+		try {
+			uri = new URI(
+			        "https", 
+			        "mingle.io", 
+			        "/query",
+			        "q="+query,
+			        null);
+		} catch (URISyntaxException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		String request = uri.toASCIIString();
 
 		try {
-			url = new URL("https://mingle.io/query?q=ch_zh_musikschule");
+			url = new URL(request);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

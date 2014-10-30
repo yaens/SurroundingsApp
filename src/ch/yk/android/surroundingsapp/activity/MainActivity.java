@@ -1,7 +1,5 @@
 package ch.yk.android.surroundingsapp.activity;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -15,14 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import ch.yk.android.surroundingsapp.R;
-import ch.yk.android.surroundingsapp.RESTResult.Musikschule;
-import ch.yk.android.surroundingsapp.obstacleHandler.MusikschuleHandler;
+import ch.yk.android.surroundingsapp.businessobject.Musikschule;
+import ch.yk.android.surroundingsapp.obstacleHandler.ConcreteObstacleHandler;
 import ch.yk.android.surroundingsapp.rest.GenericAPICall;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends FragmentActivity {
 
@@ -47,7 +43,7 @@ public class MainActivity extends FragmentActivity {
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        boolean handled = false;
 		        if (actionId == EditorInfo.IME_ACTION_DONE) {
-		        	
+		        	mMap.clear();
 		        	//Hide Keyboard after the ok button click
 		        	v.clearFocus();
 		        	EditText myEditText = (EditText) findViewById(R.id.input_address);  
@@ -99,8 +95,8 @@ public class MainActivity extends FragmentActivity {
 
 	private void setUpMap() {
 		
-		MusikschuleHandler msHandler = new MusikschuleHandler(mapHandler);
-
+		ConcreteObstacleHandler msHandler = new ConcreteObstacleHandler<Musikschule>(mapHandler, Musikschule.class);
+		msHandler.setQuery("ch_zh_kindergarten", 47.367, 8.5500, 10);
 		new GenericAPICall(msHandler).executeAPICall();
 
 	}

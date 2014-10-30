@@ -4,21 +4,19 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import ch.yk.android.surroundingsapp.RESTResult.Result;
-import ch.yk.android.surroundingsapp.activity.MapHandler;
 import ch.yk.android.surroundingsapp.activity.OnTaskCompleted;
-import ch.yk.android.surroundingsapp.obstacleHandler.ResultHandler;
+import ch.yk.android.surroundingsapp.obstacleHandler.ObstacleHandler;
 
 public class GenericAPICall implements OnTaskCompleted{
 	
-	private ResultHandler resultHandler;
+	private ObstacleHandler resultHandler;
 	
-	public GenericAPICall(ResultHandler rHandler){
+	public GenericAPICall(ObstacleHandler rHandler){
 		this.resultHandler = rHandler;
 	}
 	
 	public void executeAPICall(){
-		new CallAPI(this).execute();
+		new CallAPI(this).execute(resultHandler.getAPICall());
 	}
 
 	@Override

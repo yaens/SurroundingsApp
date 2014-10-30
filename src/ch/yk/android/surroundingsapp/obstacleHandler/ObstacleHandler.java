@@ -6,17 +6,15 @@ import org.json.JSONObject;
 
 import ch.yk.android.surroundingsapp.activity.MapHandler;
 
-public abstract class ResultHandler {
+public abstract class ObstacleHandler {
 	
 	private MapHandler mapHandler;
 
-	public ResultHandler(MapHandler mapHandler){
+	public ObstacleHandler(MapHandler mapHandler){
 
 		this.setMapHandler(mapHandler);	
 	}
 	
-	public abstract void handleResult(ArrayList<JSONObject> resultList);
-
 	public MapHandler getMapHandler() {
 		return mapHandler;
 	}
@@ -24,5 +22,9 @@ public abstract class ResultHandler {
 	public void setMapHandler(MapHandler mapHandler) {
 		this.mapHandler = mapHandler;
 	}
+	
+	public abstract void handleResult(ArrayList<JSONObject> resultList);
+	
+	public abstract String getAPICall();
 
 }
