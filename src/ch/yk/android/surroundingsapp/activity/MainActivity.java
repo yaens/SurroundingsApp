@@ -1,6 +1,12 @@
 package ch.yk.android.surroundingsapp.activity;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
@@ -24,6 +30,7 @@ public class MainActivity extends FragmentActivity {
 
 	private GoogleMap mMap;
 	AutoCompleteTextView autoCompleteTextView;
+	private Context appContext;
 	
 	private MapHandler mapHandler;
 
@@ -32,6 +39,8 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setUpMapIfNeeded();
+		
+		this.appContext = this.getBaseContext();
 		
 		autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.input_address);
 		
@@ -51,9 +60,21 @@ public class MainActivity extends FragmentActivity {
 		        	      Context.INPUT_METHOD_SERVICE);
 		        	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
 		        	
+		        	Geocoder gc=new Geocoder(appContext,Locale.GERMAN);
+		        	List<Address> addresses = null;
+		        	try {
+		        		
+						addresses=gc.getFromLocationName(myEditText.getText().toString(), 1);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	
+		        	Address currentAddress = addresses.get(0);
+		        	
 		            handled = true;
 		            
-		            setUpMap();
+		            setUpMap(currentAddress.getLatitude(),currentAddress.getLongitude());
 		        }
 		        return handled;
 		    }
@@ -93,10 +114,13 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private void setUpMap() {
+	private void setUpMap(double latitude, double longitude) {
+		
+		this.mapHandler.addMarker("Home", latitude, longitude, "Home.png");
+		this.mapHandler.zoomToLocation(latitude, longitude);
 		
 		ConcreteObstacleHandler msHandler = new ConcreteObstacleHandler<Musikschule>(mapHandler, Musikschule.class);
-		msHandler.setQuery("ch_zh_kindergarten", 47.367, 8.5500, 10);
+		msHandler.setQuery("ch_zh_kindergarten", latitude, longitude, 1);
 		new GenericAPICall(msHandler).executeAPICall();
 
 	}

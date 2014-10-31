@@ -109,7 +109,7 @@ Filterable {
 			if (cName != null) {
 				countryName = cName;
 			} else {
-				countryName = "in";
+				countryName = "ch";
 			}
 			sb.append("&components=country:" + countryName);
 			sb.append("&input=" + URLEncoder.encode(input, "utf8"));
