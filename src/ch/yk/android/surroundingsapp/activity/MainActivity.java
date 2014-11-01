@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import ch.yk.android.surroundingsapp.R;
+import ch.yk.android.surroundingsapp.businessobject.Kindergarten;
 import ch.yk.android.surroundingsapp.businessobject.Musikschule;
 import ch.yk.android.surroundingsapp.obstacleHandler.ConcreteObstacleHandler;
 import ch.yk.android.surroundingsapp.rest.GenericAPICall;
@@ -74,7 +75,7 @@ public class MainActivity extends FragmentActivity {
 		        	
 		            handled = true;
 		            
-		            setUpMap(currentAddress.getLatitude(),currentAddress.getLongitude());
+		            setUpMap(currentAddress);
 		        }
 		        return handled;
 		    }
@@ -114,14 +115,48 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private void setUpMap(double latitude, double longitude) {
+	private void setUpMap(Address currentAddress) {
 		
-		this.mapHandler.addMarker("Home", latitude, longitude, "Home.png");
+		double latitude = currentAddress.getLatitude();
+		double longitude = currentAddress.getLongitude();
+		
+		this.mapHandler.addMarker("Home", latitude, longitude, "Home.png", this.buildDescription(currentAddress));
 		this.mapHandler.zoomToLocation(latitude, longitude);
 		
-		ConcreteObstacleHandler msHandler = new ConcreteObstacleHandler<Musikschule>(mapHandler, Musikschule.class);
-		msHandler.setQuery("ch_zh_kindergarten", latitude, longitude, 1);
-		new GenericAPICall(msHandler).executeAPICall();
+		ConcreteObstacleHandler<Musikschule> musikschuleHandler = new ConcreteObstacleHandler<Musikschule>(mapHandler, Musikschule.class);
+		musikschuleHandler.setQuery("ch_zh_musikschule", latitude, longitude, 1);
+		
+		ConcreteObstacleHandler<Kindergarten> kindergartenHandler = new ConcreteObstacleHandler<Kindergarten>(mapHandler, Kindergarten.class);
+		kindergartenHandler.setQuery("ch_zh_kindergarten", latitude, longitude, 1);
+		
+		new GenericAPICall(musikschuleHandler).executeAPICall();
+		new GenericAPICall(kindergartenHandler).executeAPICall();
 
+	}
+	
+	private String buildDescription(Address currentAddress){
+		String description = "";
+		
+		description += currentAddress.getThoroughfare();
+		
+		if(currentAddress.getSubThoroughfare()!=null){
+			description += " " + currentAddress.getSubThoroughfare();
+		}
+		
+		if(currentAddress.getPostalCode()!=null){
+			description += ", " + currentAddress.getPostalCode();
+		}else {
+			description += ", ";
+		}
+		
+		if(currentAddress.getSubAdminArea()!=null){
+			description += " " + currentAddress.getSubAdminArea();
+		}
+		
+		if(currentAddress.getSubLocality()!=null){
+			description += " " + currentAddress.getSubLocality();
+		}
+		
+		return description;
 	}
 }

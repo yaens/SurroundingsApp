@@ -53,7 +53,8 @@ public class ConcreteObstacleHandler<T extends Result> extends ObstacleHandler {
 
 			this.getMapHandler().addMarker(resultObject.getName(),
 					resultObject.getLat(), resultObject.getLon(),
-					resultObject.getIconName());
+					resultObject.getIconName(),
+					resultObject.getDescription());
 		}
 
 	}

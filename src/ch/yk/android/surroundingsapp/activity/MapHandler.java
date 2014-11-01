@@ -11,10 +11,11 @@ public class MapHandler {
 	private GoogleMap gmap;
 
 	public MapHandler(GoogleMap gmap) {
+		gmap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 		this.gmap = gmap;
 	}
 
-	public void addMarker(String name, double lat, double lon, String iconName) {
+	public void addMarker(String name, double lat, double lon, String iconName, String description) {
 		
 		MarkerOptions markerOptions = new MarkerOptions();
 		
@@ -22,6 +23,9 @@ public class MapHandler {
 		markerOptions.title(name);
 		markerOptions.icon(BitmapDescriptorFactory.fromAsset("icons/"+iconName));
 		
+		if(!description.isEmpty()){
+			markerOptions.snippet(description);
+		}	
 		this.gmap.addMarker(markerOptions);
 	}
 	

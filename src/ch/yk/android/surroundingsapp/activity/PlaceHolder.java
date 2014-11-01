@@ -112,6 +112,8 @@ Filterable {
 				countryName = "ch";
 			}
 			sb.append("&components=country:" + countryName);
+			sb.append("&types=address");
+			sb.append("&types=geocode");
 			sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
 			URL url = new URL(sb.toString());
