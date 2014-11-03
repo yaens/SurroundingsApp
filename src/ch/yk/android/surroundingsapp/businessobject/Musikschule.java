@@ -53,7 +53,7 @@ public class Musikschule extends Result {
 
 	@Override
 	public String getDescription() {
-		String description = this.getAddress() + " " + this.getWww();
+		String description = this.getAddress();
 		return description;
 	}
 }

@@ -3,12 +3,12 @@ package ch.yk.android.surroundingsapp.businessobject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Kindergarten extends Result{
+public class Schule extends Result {
 	
 	private String www;
 	private String address;
 	
-	public Kindergarten(){
+	public Schule(){
 
 	}
 	
@@ -37,16 +37,18 @@ public class Kindergarten extends Result{
 		String www = obj.getString("www");
 		String adresse = obj.getString("Adresse");
 		
-		this.setName("Kindergarten: " + name);
+		setName("Schule:" + name);
 		this.setLat(Double.parseDouble(lat));
 		this.setLon(Double.parseDouble(lon));
 		this.setWww(www);
 		this.setAddress(adresse);
+		
+		
 	}
 	
 	@Override
 	public String getIconName(){
-		return "Kindergarten.png";
+		return "Schule.png";
 	}
 
 	@Override
@@ -54,5 +56,4 @@ public class Kindergarten extends Result{
 		String description = this.getAddress();
 		return description;
 	}
-
 }

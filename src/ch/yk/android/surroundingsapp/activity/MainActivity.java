@@ -21,6 +21,10 @@ import android.widget.TextView.OnEditorActionListener;
 import ch.yk.android.surroundingsapp.R;
 import ch.yk.android.surroundingsapp.businessobject.Kindergarten;
 import ch.yk.android.surroundingsapp.businessobject.Musikschule;
+import ch.yk.android.surroundingsapp.businessobject.Park;
+import ch.yk.android.surroundingsapp.businessobject.Sammelstelle;
+import ch.yk.android.surroundingsapp.businessobject.Schule;
+import ch.yk.android.surroundingsapp.businessobject.Spielplatz;
 import ch.yk.android.surroundingsapp.obstacleHandler.ConcreteObstacleHandler;
 import ch.yk.android.surroundingsapp.rest.GenericAPICall;
 
@@ -53,7 +57,8 @@ public class MainActivity extends FragmentActivity {
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        boolean handled = false;
 		        if (actionId == EditorInfo.IME_ACTION_DONE) {
-		        	mMap.clear();
+		        	
+		        	mapHandler.clearMap();
 		        	//Hide Keyboard after the ok button click
 		        	v.clearFocus();
 		        	EditText myEditText = (EditText) findViewById(R.id.input_address);  
@@ -110,7 +115,7 @@ public class MainActivity extends FragmentActivity {
 					.findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
-				this.mapHandler = new MapHandler(mMap);
+				this.mapHandler = new MapHandler(mMap,this);
 			}
 		}
 	}
@@ -129,8 +134,24 @@ public class MainActivity extends FragmentActivity {
 		ConcreteObstacleHandler<Kindergarten> kindergartenHandler = new ConcreteObstacleHandler<Kindergarten>(mapHandler, Kindergarten.class);
 		kindergartenHandler.setQuery("ch_zh_kindergarten", latitude, longitude, 1);
 		
-		new GenericAPICall(musikschuleHandler).executeAPICall();
+		ConcreteObstacleHandler<Schule> schuleHandler = new ConcreteObstacleHandler<Schule>(mapHandler, Schule.class);
+		schuleHandler.setQuery("ch_zh_volksschule", latitude, longitude, 1);
+		
+		ConcreteObstacleHandler<Sammelstelle> sammelstelleHandler = new ConcreteObstacleHandler<Sammelstelle>(mapHandler, Sammelstelle.class);
+		sammelstelleHandler.setQuery("ch_zh_sammelstelle", latitude, longitude, 1);
+		
+		ConcreteObstacleHandler<Spielplatz> spielplatzHandler = new ConcreteObstacleHandler<Spielplatz>(mapHandler, Spielplatz.class);
+		spielplatzHandler.setQuery("ch_zh_spielplaetze", latitude, longitude, 1);
+		
+		ConcreteObstacleHandler<Park> parkHandler = new ConcreteObstacleHandler<Park>(mapHandler, Park.class);
+		parkHandler.setQuery("ch_zh_park", latitude, longitude, 1);
+		
+		//new GenericAPICall(musikschuleHandler).executeAPICall();
 		new GenericAPICall(kindergartenHandler).executeAPICall();
+		new GenericAPICall(schuleHandler).executeAPICall();
+		new GenericAPICall(sammelstelleHandler).executeAPICall();
+		new GenericAPICall(spielplatzHandler).executeAPICall();
+		new GenericAPICall(parkHandler).executeAPICall();
 
 	}
 	
