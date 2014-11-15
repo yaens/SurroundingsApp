@@ -3,6 +3,8 @@ package ch.yk.android.surroundingsapp.businessobject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.yk.android.surroundingsapp.R;
+
 public class Sammelstelle extends Result{
 	
 	private String www;
@@ -45,8 +47,8 @@ public class Sammelstelle extends Result{
 	}
 	
 	@Override
-	public String getIconName(){
-		return "Sammelstelle.png";
+	public int getIconName(){
+		return R.drawable.icon_sammelstelle;
 	}
 
 	@Override

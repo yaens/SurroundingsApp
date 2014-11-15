@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import ch.yk.android.surroundingsapp.activity.MapHandler;
+import ch.yk.android.surroundingsapp.map.MapHandler;
 
 public abstract class ObstacleHandler {
 	

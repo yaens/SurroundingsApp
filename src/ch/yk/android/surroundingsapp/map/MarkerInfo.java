@@ -1,4 +1,4 @@
-package ch.yk.android.surroundingsapp.activity;
+package ch.yk.android.surroundingsapp.map;
 
 public class MarkerInfo {
 	private String name;

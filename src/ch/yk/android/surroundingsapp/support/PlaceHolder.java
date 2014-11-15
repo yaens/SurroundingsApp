@@ -1,4 +1,4 @@
-package ch.yk.android.surroundingsapp.activity;
+package ch.yk.android.surroundingsapp.support;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

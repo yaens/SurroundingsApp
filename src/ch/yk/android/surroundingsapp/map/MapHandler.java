@@ -1,4 +1,4 @@
-package ch.yk.android.surroundingsapp.activity;
+package ch.yk.android.surroundingsapp.map;
 
 import java.util.HashMap;
 
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import ch.yk.android.surroundingsapp.R;
+import ch.yk.android.surroundingsapp.activity.MainActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -70,13 +71,15 @@ public class MapHandler {
 		gmap.clear();
 	}
 
-	public void addMarker(String name, double lat, double lon, String iconName, String description) {
+	public void addMarker(String name, double lat, double lon, int drawable, String description) {
 		
 		MarkerOptions markerOptions = new MarkerOptions();
 		
 		markerOptions.position(new LatLng(lat, lon));
 		markerOptions.title(name);
-		markerOptions.icon(BitmapDescriptorFactory.fromAsset("icons/"+iconName));
+		
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(drawable));
+		//markerOptions.icon(BitmapDescriptorFactory.fromAsset("icons/"+iconName));
 		
 		if(!description.isEmpty()){
 			markerOptions.snippet(description);

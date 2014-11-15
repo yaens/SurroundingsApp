@@ -3,6 +3,8 @@ package ch.yk.android.surroundingsapp.businessobject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.yk.android.surroundingsapp.R;
+
 public class Result {
 	
 	private String name;
@@ -44,9 +46,8 @@ public class Result {
 		this.setLon(Double.parseDouble(lon));
 	}
 	
-	public String getIconName(){
-		
-		return "Unknown.png";
+	public int getIconName(){
+		return R.drawable.icon_unknown;
 	}
 
 	public String getDescription() {

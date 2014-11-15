@@ -3,6 +3,8 @@ package ch.yk.android.surroundingsapp.businessobject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.yk.android.surroundingsapp.R;
+
 public class Spielplatz extends Result{
 	
 	private String www;
@@ -33,8 +35,8 @@ public class Spielplatz extends Result{
 	}
 	
 	@Override
-	public String getIconName(){
-		return "Spielplatz.png";
+	public int getIconName(){
+		return R.drawable.icon_spielplatz;
 	}
 
 	@Override

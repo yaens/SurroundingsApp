@@ -3,6 +3,8 @@ package ch.yk.android.surroundingsapp.businessobject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.yk.android.surroundingsapp.R;
+
 public class Schule extends Result {
 	
 	private String www;
@@ -47,8 +49,8 @@ public class Schule extends Result {
 	}
 	
 	@Override
-	public String getIconName(){
-		return "Schule.png";
+	public int getIconName(){
+		return R.drawable.icon_schule;
 	}
 
 	@Override

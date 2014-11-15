@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.yk.android.surroundingsapp.activity.MapHandler;
 import ch.yk.android.surroundingsapp.businessobject.Result;
+import ch.yk.android.surroundingsapp.map.MapHandler;
 
 public class ConcreteObstacleHandler<T extends Result> extends ObstacleHandler {
 
