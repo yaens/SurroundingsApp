@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory
+        android:key="pref_key_common_settings"
+        android:title="Einstellungen" >
+        <EditTextPreference
+            android:defaultValue="100"
+            android:key="pref_key_common_radius"
+            android:title="Suchradius" android:icon="@drawable/category_icon_radius"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_importdata_settings"
+        android:title="Daten" >
+        <PreferenceScreen
+	        android:key="pref_key_importdata_category_common"
+	        android:persistent="false" android:title="Allgemein" android:icon="@drawable/category_icon_common">
+	        <CheckBoxPreference android:key="pref_key_importdata_category_common_recycling" android:icon="@drawable/icon_recycling" android:title="Recycling Sammelstellen"/>
+	    </PreferenceScreen>
+	    <PreferenceScreen
+	        android:key="pref_key_importdata_category_family"
+	        android:persistent="false" android:title="Familie" android:icon="@drawable/category_icon_family">
+	        <CheckBoxPreference android:key="pref_key_importdata_category_family_schools" android:icon="@drawable/icon_school" android:title="Schulen"/>
+	    	<CheckBoxPreference
+	    	    android:icon="@drawable/icon_playground"
+	    	    android:key="pref_key_importdata_category_family_playground"
+	    	    android:title="Spielplätze" />
+
+	    	<CheckBoxPreference android:key="pref_key_importdata_category_family_musicschool" android:icon="@drawable/icon_musicschool" android:title="Musikschulen"/>
+	    	<CheckBoxPreference android:key="pref_key_importdata_category_family_kindergarden" android:icon="@drawable/icon_kindergarden" android:title="Kindergarten"/>
+	    </PreferenceScreen>
+	    <PreferenceScreen
+	        android:key="pref_key_importdata_category_nature"
+	        android:persistent="false" android:title="Natur" android:icon="@drawable/category_icon_nature">
+	        <CheckBoxPreference android:key="pref_key_importdata_category_nature_parks" android:icon="@drawable/icon_park" android:title="Parks"/>
+	    </PreferenceScreen>
+	    <PreferenceScreen android:key="pref_key_importdata_category_sports" android:title="Sport" android:persistent="false" android:icon="@drawable/category_icon_sports">
+	        <CheckBoxPreference android:icon="@drawable/icon_tenniscourt" android:key="pref_key_importdata_category_sports_tenniscourts" android:title="Tennisplätze"/>
+	    	<CheckBoxPreference android:icon="@drawable/icon_swimmingpool" android:key="pref_key_importdata_category_sports_swimmingpools" android:title="Schwimmbäder"/>
+	    </PreferenceScreen>
+    </PreferenceCategory>
+</PreferenceScreen>

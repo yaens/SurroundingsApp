@@ -29,6 +29,14 @@
         android:hint="@string/address_hint"
         android:imeOptions="actionDone" />
     
+    <LinearLayout
+    android:id="@+id/dummy_id"
+    android:orientation="vertical"
+    android:layout_width="0px"
+    android:layout_height="0px"
+    android:focusable="true"
+    android:focusableInTouchMode="true" />
+    
 
     <!--<EditText
         android:id="@+id/input_address"

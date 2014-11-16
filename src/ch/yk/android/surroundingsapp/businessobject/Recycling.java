@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import ch.yk.android.surroundingsapp.R;
 
-public class Schule extends Result {
+public class Recycling extends Result{
 	
 	private String www;
 	private String address;
 	
-	public Schule(){
+	public Recycling(){
 
 	}
 	
@@ -35,22 +35,19 @@ public class Schule extends Result {
 		
 		String lat = obj.getString("lat");
 		String lon = obj.getString("lon");
-		String name = obj.getString("Name");
 		String www = obj.getString("www");
 		String adresse = obj.getString("Adresse");
 		
-		setName("Schule:" + name);
+		this.setName("Sammelstelle");
 		this.setLat(Double.parseDouble(lat));
 		this.setLon(Double.parseDouble(lon));
 		this.setWww(www);
 		this.setAddress(adresse);
-		
-		
 	}
 	
 	@Override
 	public int getIconName(){
-		return R.drawable.icon_schule;
+		return R.drawable.icon_recycling;
 	}
 
 	@Override
@@ -58,4 +55,5 @@ public class Schule extends Result {
 		String description = this.getAddress();
 		return description;
 	}
+
 }

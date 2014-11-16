@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import ch.yk.android.surroundingsapp.R;
 
-public class Kindergarten extends Result{
+public class School extends Result {
 	
 	private String www;
 	private String address;
 	
-	public Kindergarten(){
+	public School(){
 
 	}
 	
@@ -39,16 +39,18 @@ public class Kindergarten extends Result{
 		String www = obj.getString("www");
 		String adresse = obj.getString("Adresse");
 		
-		this.setName("Kindergarten: " + name);
+		setName("Schule: " + name);
 		this.setLat(Double.parseDouble(lat));
 		this.setLon(Double.parseDouble(lon));
 		this.setWww(www);
 		this.setAddress(adresse);
+		
+		
 	}
 	
 	@Override
 	public int getIconName(){
-		return R.drawable.icon_kindergarten;
+		return R.drawable.icon_school;
 	}
 
 	@Override
@@ -56,5 +58,4 @@ public class Kindergarten extends Result{
 		String description = this.getAddress();
 		return description;
 	}
-
 }

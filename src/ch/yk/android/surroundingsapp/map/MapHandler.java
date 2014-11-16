@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapHandler {
+public class MapHandler implements IMapHandler{
 
 	private GoogleMap gmap;
 	private HashMap<Marker, MarkerInfo> markerMap = new HashMap<Marker, MarkerInfo>();

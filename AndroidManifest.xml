@@ -22,7 +22,7 @@
         android:required="true"/>
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher_doge"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
@@ -36,16 +36,17 @@
         		
         <activity
             android:name="ch.yk.android.surroundingsapp.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity 
 		    android:name="ch.yk.android.surroundingsapp.activity.SettingsActivity" 
-		    android:label="Settings">
+		    android:label="Settings"
+		    android:screenOrientation="portrait">
 		</activity>
     </application>
 

@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import ch.yk.android.surroundingsapp.R;
 
-public class Spielplatz extends Result{
+public class Musicschool extends Result {
 	
 	private String www;
 	private String address;
 	
-	public Spielplatz(){
+	public Musicschool(){
 
 	}
 	
@@ -18,8 +18,16 @@ public class Spielplatz extends Result{
 		return www;
 	}
 
+	private void setWww(String www) {
+		this.www = www;
+	}
+
 	public String getAddress() {
 		return address;
+	}
+
+	private void setAddress(String address) {
+		this.address = address;
 	}
 	
 	@Override
@@ -27,22 +35,27 @@ public class Spielplatz extends Result{
 		
 		String lat = obj.getString("lat");
 		String lon = obj.getString("lon");
-		String name = obj.getString("Objektbezeichung");
+		String name = obj.getString("Name");
+		String www = obj.getString("www");
+		String adresse = obj.getString("Adresse");
 		
-		this.setName("Spielplatz: " + name);
+		setName("Musikschule:" + name);
 		this.setLat(Double.parseDouble(lat));
 		this.setLon(Double.parseDouble(lon));
+		this.setWww(www);
+		this.setAddress(adresse);
+		
+		
 	}
 	
 	@Override
 	public int getIconName(){
-		return R.drawable.icon_spielplatz;
+		return R.drawable.icon_musicschool;
 	}
 
 	@Override
 	public String getDescription() {
-		String description = " ";
+		String description = this.getAddress();
 		return description;
 	}
-
 }

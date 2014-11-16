@@ -6,11 +6,9 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -19,20 +17,23 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 import ch.yk.android.surroundingsapp.R;
-import ch.yk.android.surroundingsapp.businessobject.Kindergarten;
-import ch.yk.android.surroundingsapp.businessobject.Musikschule;
+import ch.yk.android.surroundingsapp.businessobject.Kindergarden;
+import ch.yk.android.surroundingsapp.businessobject.Musicschool;
 import ch.yk.android.surroundingsapp.businessobject.Park;
-import ch.yk.android.surroundingsapp.businessobject.Sammelstelle;
-import ch.yk.android.surroundingsapp.businessobject.Schule;
-import ch.yk.android.surroundingsapp.businessobject.Spielplatz;
+import ch.yk.android.surroundingsapp.businessobject.Playground;
+import ch.yk.android.surroundingsapp.businessobject.Recycling;
+import ch.yk.android.surroundingsapp.businessobject.School;
+import ch.yk.android.surroundingsapp.businessobject.Swimmingpool;
+import ch.yk.android.surroundingsapp.businessobject.Tenniscourt;
 import ch.yk.android.surroundingsapp.map.MapHandler;
 import ch.yk.android.surroundingsapp.obstacleHandler.ConcreteObstacleHandler;
 import ch.yk.android.surroundingsapp.rest.GenericAPICall;
 import ch.yk.android.surroundingsapp.support.PlaceHolder;
+import ch.yk.android.surroundingsapp.support.SettingsHandler;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -44,12 +45,17 @@ public class MainActivity extends ActionBarActivity {
 	private Context appContext;
 	
 	private MapHandler mapHandler;
+	private SettingsHandler settingsHandler;
+	
+	public static boolean refreshMap = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setUpMapIfNeeded();
+		
+		this.settingsHandler = new SettingsHandler(this);
 		
 		this.appContext = this.getBaseContext();
 		
@@ -60,23 +66,28 @@ public class MainActivity extends ActionBarActivity {
 		
 		autoCompleteTextView.setOnEditorActionListener(new OnEditorActionListener() {
 		    @Override
-		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		    public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
 		        boolean handled = false;
+
 		        if (actionId == EditorInfo.IME_ACTION_DONE) {
 		        	
+		        	//clear the map after entering a new adress
 		        	mapHandler.clearMap();
 		        	//Hide Keyboard after the ok button click
-		        	v.clearFocus();
-		        	EditText myEditText = (EditText) findViewById(R.id.input_address);  
-		        	InputMethodManager imm = (InputMethodManager)getSystemService(
+		        	textView.clearFocus();
+		        	
+		        	EditText searchAdressField = (EditText) findViewById(R.id.input_address);
+		        	((LinearLayout) findViewById(R.id.dummy_id)).requestFocus();
+		        	
+		        	InputMethodManager autoCompletionManager = (InputMethodManager)getSystemService(
 		        	      Context.INPUT_METHOD_SERVICE);
-		        	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
+		        	autoCompletionManager.hideSoftInputFromWindow(searchAdressField.getWindowToken(), 0);
 		        	
 		        	Geocoder gc=new Geocoder(appContext,Locale.GERMAN);
 		        	List<Address> addresses = null;
 		        	try {
 		        		
-						addresses=gc.getFromLocationName(myEditText.getText().toString(), 1);
+						addresses=gc.getFromLocationName(searchAdressField.getText().toString(), 1);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -91,6 +102,17 @@ public class MainActivity extends ActionBarActivity {
 		        return handled;
 		    }
 		});
+	}
+	
+	@Override
+	protected void onResume()
+	{
+	   super.onResume();
+
+	   if(refreshMap){
+		   this.mapHandler.clearMap();
+		   refreshMap = false;
+	   }
 	}
 
 	@Override
@@ -132,10 +154,7 @@ public class MainActivity extends ActionBarActivity {
 
 	private void setUpMap(Address currentAddress) {
 		
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		String sradius = sharedPref.getString("pref_key_common_radius", "100");
-		
-		Double radius = Double.valueOf(sradius);
+		Double radius = this.settingsHandler.getRadius();
 		radius = radius / 1000;
 		
 		double latitude = currentAddress.getLatitude();
@@ -144,31 +163,53 @@ public class MainActivity extends ActionBarActivity {
 		this.mapHandler.addMarker("Home", latitude, longitude, R.drawable.icon_home, this.buildDescription(currentAddress));
 		this.mapHandler.zoomToLocation(latitude, longitude);
 		
-		ConcreteObstacleHandler<Musikschule> musikschuleHandler = new ConcreteObstacleHandler<Musikschule>(mapHandler, Musikschule.class);
-		musikschuleHandler.setQuery("ch_zh_musikschule", latitude, longitude, radius);
+		if(this.settingsHandler.isIncludeMusicschool()){
+			ConcreteObstacleHandler<Musicschool> musikschuleHandler = new ConcreteObstacleHandler<Musicschool>(mapHandler, Musicschool.class);
+			musikschuleHandler.setQuery("ch_zh_musikschule", latitude, longitude, radius);
+			new GenericAPICall(musikschuleHandler).executeAPICall();
+		}
 		
-		ConcreteObstacleHandler<Kindergarten> kindergartenHandler = new ConcreteObstacleHandler<Kindergarten>(mapHandler, Kindergarten.class);
-		kindergartenHandler.setQuery("ch_zh_kindergarten", latitude, longitude, radius);
+		if(this.settingsHandler.isIncludeKindergarden()){
+			ConcreteObstacleHandler<Kindergarden> kindergartenHandler = new ConcreteObstacleHandler<Kindergarden>(mapHandler, Kindergarden.class);
+			kindergartenHandler.setQuery("ch_zh_kindergarten", latitude, longitude, radius);
+			new GenericAPICall(kindergartenHandler).executeAPICall();
+		}
 		
-		ConcreteObstacleHandler<Schule> schuleHandler = new ConcreteObstacleHandler<Schule>(mapHandler, Schule.class);
-		schuleHandler.setQuery("ch_zh_volksschule", latitude, longitude, radius);
+		if(this.settingsHandler.isIncludeSchools()){
+			ConcreteObstacleHandler<School> schuleHandler = new ConcreteObstacleHandler<School>(mapHandler, School.class);
+			schuleHandler.setQuery("ch_zh_volksschule", latitude, longitude, radius);
+			new GenericAPICall(schuleHandler).executeAPICall();
+		}
 		
-		ConcreteObstacleHandler<Sammelstelle> sammelstelleHandler = new ConcreteObstacleHandler<Sammelstelle>(mapHandler, Sammelstelle.class);
-		sammelstelleHandler.setQuery("ch_zh_sammelstelle", latitude, longitude, radius);
+		if(this.settingsHandler.isIncludeRecycling()){
+			ConcreteObstacleHandler<Recycling> sammelstelleHandler = new ConcreteObstacleHandler<Recycling>(mapHandler, Recycling.class);
+			sammelstelleHandler.setQuery("ch_zh_sammelstelle", latitude, longitude, radius);
+			new GenericAPICall(sammelstelleHandler).executeAPICall();
+		}
 		
-		ConcreteObstacleHandler<Spielplatz> spielplatzHandler = new ConcreteObstacleHandler<Spielplatz>(mapHandler, Spielplatz.class);
-		spielplatzHandler.setQuery("ch_zh_spielplaetze", latitude, longitude, radius);
+		if(this.settingsHandler.isIncludePlayground()){
+			ConcreteObstacleHandler<Playground> spielplatzHandler = new ConcreteObstacleHandler<Playground>(mapHandler, Playground.class);
+			spielplatzHandler.setQuery("ch_zh_spielplaetze", latitude, longitude, radius);
+			new GenericAPICall(spielplatzHandler).executeAPICall();
+		}
 		
-		ConcreteObstacleHandler<Park> parkHandler = new ConcreteObstacleHandler<Park>(mapHandler, Park.class);
-		parkHandler.setQuery("ch_zh_park", latitude, longitude, radius);
+		if(this.settingsHandler.isIncludeParks()){
+			ConcreteObstacleHandler<Park> parkHandler = new ConcreteObstacleHandler<Park>(mapHandler, Park.class);
+			parkHandler.setQuery("ch_zh_park", latitude, longitude, radius);
+			new GenericAPICall(parkHandler).executeAPICall();
+		}
 		
-		new GenericAPICall(musikschuleHandler).executeAPICall();
-		new GenericAPICall(kindergartenHandler).executeAPICall();
-		new GenericAPICall(schuleHandler).executeAPICall();
-		new GenericAPICall(sammelstelleHandler).executeAPICall();
-		new GenericAPICall(spielplatzHandler).executeAPICall();
-		new GenericAPICall(parkHandler).executeAPICall();
-
+		if(this.settingsHandler.isIncludeTenniscourt()){
+			ConcreteObstacleHandler<Tenniscourt> tenniscourtHandler = new ConcreteObstacleHandler<Tenniscourt>(mapHandler, Tenniscourt.class);
+			tenniscourtHandler.setQuery("ch_zh_tennisplatz", latitude, longitude, radius);
+			new GenericAPICall(tenniscourtHandler).executeAPICall();
+		}
+		
+		if(this.settingsHandler.isIncludeSwimmingpool()){
+			ConcreteObstacleHandler<Swimmingpool> swimmingpoolHandler = new ConcreteObstacleHandler<Swimmingpool>(mapHandler, Swimmingpool.class);
+			swimmingpoolHandler.setQuery("ch_zh_hallenbad", latitude, longitude, radius);
+			new GenericAPICall(swimmingpoolHandler).executeAPICall();
+		}
 	}
 	
 	private String buildDescription(Address currentAddress){
