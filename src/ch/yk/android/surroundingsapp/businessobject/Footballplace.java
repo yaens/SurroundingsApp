@@ -5,21 +5,14 @@ import org.json.JSONObject;
 
 import ch.yk.android.surroundingsapp.R;
 
-public class Swimmingpool extends Result{
-	private String www;
+public class Footballplace extends Result{
+
 	private String address;
 	private String telNr;
+	private String www;
 	
-	public Swimmingpool(){
+	public Footballplace(){
 
-	}
-	
-	public String getWww() {
-		return www;
-	}
-
-	private void setWww(String www) {
-		this.www = www;
 	}
 
 	public String getAddress() {
@@ -28,6 +21,14 @@ public class Swimmingpool extends Result{
 
 	private void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getWww() {
+		return www;
+	}
+
+	private void setWww(String www) {
+		this.www = www;
 	}
 	
 	public String getTelNr() {
@@ -48,7 +49,7 @@ public class Swimmingpool extends Result{
 		String telNr = obj.getString("Tel");
 		String www = obj.getString("www");
 		
-		setName("Schwimmbad: " + name);
+		setName("Fussballplatz: " + name);
 		this.setLat(Double.parseDouble(lat));
 		this.setLon(Double.parseDouble(lon));
 		this.setAddress(adresse);
@@ -58,7 +59,7 @@ public class Swimmingpool extends Result{
 	
 	@Override
 	public int getIconName(){
-		return R.drawable.icon_swimmingpool;
+		return R.drawable.icon_soccer;
 	}
 
 	@Override

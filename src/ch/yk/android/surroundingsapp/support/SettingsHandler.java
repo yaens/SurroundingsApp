@@ -1,13 +1,23 @@
 package ch.yk.android.surroundingsapp.support;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import ch.yk.android.surroundingsapp.activity.MainActivity;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class SettingsHandler {
 	
+	private ArrayList<String> activeObstacleList;
+
 	private SharedPreferences sharedPref;
 	public SettingsHandler(Context settingsContext){
+		
+		activeObstacleList = new ArrayList<String>();
+		
 		this.sharedPref = PreferenceManager.getDefaultSharedPreferences(settingsContext);
 	}
 
@@ -15,36 +25,44 @@ public class SettingsHandler {
 		String prefRadius = sharedPref.getString("pref_key_common_radius", "1000");
 		return Double.parseDouble(prefRadius);
 	}
-
-	public boolean isIncludeSchools() {
-		return sharedPref.getBoolean("pref_key_importdata_category_family_schools", false);
-	}
-
-	public boolean isIncludeParks() {
-		return sharedPref.getBoolean("pref_key_importdata_category_nature_parks", false);
-	}
-
-	public boolean isIncludeMusicschool() {
-		return sharedPref.getBoolean("pref_key_importdata_category_family_musicschool", false);
-	}
-
-	public boolean isIncludeKindergarden() {
-		return sharedPref.getBoolean("pref_key_importdata_category_family_kindergarden", false);
-	}
-
-	public boolean isIncludeRecycling() {
-		return sharedPref.getBoolean("pref_key_importdata_category_common_recycling", false);
-	}
-
-	public boolean isIncludePlayground() {
-		return sharedPref.getBoolean("pref_key_importdata_category_family_playground", false);
+	
+	
+	public void synchronizeActiveDataPrefs(){
+		
+		Map<String, ?> allEntries = this.sharedPref.getAll();
+		
+		for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+		    //Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
+			
+			String key = entry.getKey();
+			
+			this.addRemovePreference(key);
+		} 
+		
 	}
 	
-	public boolean isIncludeTenniscourt(){
-		return sharedPref.getBoolean("pref_key_importdata_category_sports_tenniscourts", false);
+	private void addRemovePreference(String key){
+		
+		boolean isPreferenceOn = false;
+		boolean isBool = false;
+		
+		try{
+			isPreferenceOn = this.sharedPref.getBoolean(key,false);
+			isBool = true;
+		}catch(Exception e){
+			//We just want the bool preferences here
+		}
+		
+		if(isPreferenceOn){
+			activeObstacleList.remove(key);
+			activeObstacleList.add(key);
+		}else if(isBool){
+			activeObstacleList.remove(key);
+		}
+		
 	}
 	
-	public boolean isIncludeSwimmingpool(){
-		return sharedPref.getBoolean("pref_key_importdata_category_sports_swimmingpools", false);
+	public ArrayList<String> getActiveObstacleList() {
+		return activeObstacleList;
 	}
 }

@@ -7,7 +7,8 @@
         <EditTextPreference
             android:defaultValue="100"
             android:key="pref_key_common_radius"
-            android:title="Suchradius" android:icon="@drawable/category_icon_radius"/>
+            android:title="Suchradius" android:icon="@drawable/category_icon_radius"
+            android:inputType="number"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_key_importdata_settings"
@@ -28,6 +29,7 @@
 
 	    	<CheckBoxPreference android:key="pref_key_importdata_category_family_musicschool" android:icon="@drawable/icon_musicschool" android:title="Musikschulen"/>
 	    	<CheckBoxPreference android:key="pref_key_importdata_category_family_kindergarden" android:icon="@drawable/icon_kindergarden" android:title="Kindergarten"/>
+	    	<CheckBoxPreference android:title="Kinderkrippe" android:key="pref_key_importdata_category_family_nursery" android:icon="@drawable/icon_nursery"/>
 	    </PreferenceScreen>
 	    <PreferenceScreen
 	        android:key="pref_key_importdata_category_nature"
@@ -36,7 +38,12 @@
 	    </PreferenceScreen>
 	    <PreferenceScreen android:key="pref_key_importdata_category_sports" android:title="Sport" android:persistent="false" android:icon="@drawable/category_icon_sports">
 	        <CheckBoxPreference android:icon="@drawable/icon_tenniscourt" android:key="pref_key_importdata_category_sports_tenniscourts" android:title="Tennisplätze"/>
-	    	<CheckBoxPreference android:icon="@drawable/icon_swimmingpool" android:key="pref_key_importdata_category_sports_swimmingpools" android:title="Schwimmbäder"/>
+	    	<CheckBoxPreference
+	    	    android:icon="@drawable/icon_swimmingpool"
+	    	    android:key="pref_key_importdata_category_sports_swimmingpools"
+	    	    android:title="Schwimmbäder" />
+	    	<CheckBoxPreference android:title="Fussball" android:key="pref_key_importdata_category_sports_soccer" android:icon="@drawable/icon_soccer"/>
+
 	    </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

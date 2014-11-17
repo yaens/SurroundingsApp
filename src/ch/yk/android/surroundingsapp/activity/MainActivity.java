@@ -1,8 +1,11 @@
 package ch.yk.android.surroundingsapp.activity;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,11 +24,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import ch.yk.android.surroundingsapp.R;
+import ch.yk.android.surroundingsapp.businessobject.Footballplace;
 import ch.yk.android.surroundingsapp.businessobject.Kindergarden;
 import ch.yk.android.surroundingsapp.businessobject.Musicschool;
+import ch.yk.android.surroundingsapp.businessobject.Nursery;
 import ch.yk.android.surroundingsapp.businessobject.Park;
 import ch.yk.android.surroundingsapp.businessobject.Playground;
 import ch.yk.android.surroundingsapp.businessobject.Recycling;
+import ch.yk.android.surroundingsapp.businessobject.Result;
 import ch.yk.android.surroundingsapp.businessobject.School;
 import ch.yk.android.surroundingsapp.businessobject.Swimmingpool;
 import ch.yk.android.surroundingsapp.businessobject.Tenniscourt;
@@ -49,13 +55,22 @@ public class MainActivity extends ActionBarActivity {
 	
 	public static boolean refreshMap = false;
 
+	private Map<String,Map<ConcreteObstacleHandler<? extends Result>,String>> obstacleHandlerMap;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_main);
-		setUpMapIfNeeded();
+		
+		//This map contains all obstacleHandler
+		this.obstacleHandlerMap = new HashMap<String,Map<ConcreteObstacleHandler<? extends Result>,String>>();
+		
+		this.setUpMapIfNeeded();
+		this.createObstacleMap();
 		
 		this.settingsHandler = new SettingsHandler(this);
+		this.settingsHandler.synchronizeActiveDataPrefs();
 		
 		this.appContext = this.getBaseContext();
 		
@@ -113,6 +128,8 @@ public class MainActivity extends ActionBarActivity {
 		   this.mapHandler.clearMap();
 		   refreshMap = false;
 	   }
+	   
+	   this.settingsHandler.synchronizeActiveDataPrefs();
 	}
 
 	@Override
@@ -151,8 +168,67 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 	}
+	
+	private void createObstacleMap(){
+		//Add all obstacles to the map
+		
+		//Add the SchoolHandler
+		Map<ConcreteObstacleHandler<? extends Result>,String> schoolHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		schoolHandlerMap.put(new ConcreteObstacleHandler<School>(mapHandler, School.class), "ch_zh_volksschule");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_family_schools", schoolHandlerMap);
+		
+		//Add the MusicschoolHandler
+		Map<ConcreteObstacleHandler<? extends Result>,String> musicschoolHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		musicschoolHandlerMap.put(new ConcreteObstacleHandler<Musicschool>(mapHandler, Musicschool.class), "ch_zh_musikschule");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_family_musicschool", musicschoolHandlerMap);
+		
+		//Add the KindergartenHandler
+		Map<ConcreteObstacleHandler<? extends Result>,String> kindergardenHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		kindergardenHandlerMap.put(new ConcreteObstacleHandler<Kindergarden>(mapHandler, Kindergarden.class), "ch_zh_kindergarten");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_family_kindergarden", kindergardenHandlerMap);
+		
+		//Add the RecyclingHandler
+		Map<ConcreteObstacleHandler<? extends Result>,String> recyclingHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		recyclingHandlerMap.put(new ConcreteObstacleHandler<Recycling>(mapHandler, Recycling.class), "ch_zh_sammelstelle");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_common_recycling", recyclingHandlerMap);
+		
+		//Add the PlaygroundHandler
+		Map<ConcreteObstacleHandler<? extends Result>,String> playgroundHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		playgroundHandlerMap.put(new ConcreteObstacleHandler<Playground>(mapHandler, Playground.class), "ch_zh_spielplaetze");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_family_playground", playgroundHandlerMap);
+		
+		//Add the Parks
+		Map<ConcreteObstacleHandler<? extends Result>,String> parkHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		parkHandlerMap.put(new ConcreteObstacleHandler<Park>(mapHandler, Park.class), "ch_zh_park");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_nature_parks", parkHandlerMap);
+		
+		//Add the Tenniscourts
+		Map<ConcreteObstacleHandler<? extends Result>,String> tenniscourtHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		tenniscourtHandlerMap.put(new ConcreteObstacleHandler<Tenniscourt>(mapHandler, Tenniscourt.class),"ch_zh_tennisplatz");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_sports_tenniscourts", tenniscourtHandlerMap);
+	
+		//Add the Swimmingspools
+		Map<ConcreteObstacleHandler<? extends Result>,String> swimmingpoolHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		swimmingpoolHandlerMap.put(new ConcreteObstacleHandler<Swimmingpool>(mapHandler, Swimmingpool.class), "ch_zh_hallenbad");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_sports_swimmingpools", swimmingpoolHandlerMap);
+	
+		//Add the Footballplaces
+		Map<ConcreteObstacleHandler<? extends Result>,String> footballplaceHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		footballplaceHandlerMap.put(new ConcreteObstacleHandler<Footballplace>(mapHandler, Footballplace.class), "ch_zh_fussballplatz");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_sports_soccer", footballplaceHandlerMap);
+		
+		//Add the Nurseries
+		Map<ConcreteObstacleHandler<? extends Result>,String> nurseryHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		nurseryHandlerMap.put(new ConcreteObstacleHandler<Nursery>(mapHandler, Nursery.class),"ch_zh_kinderkrippe");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_family_nursery", nurseryHandlerMap);
+		
+		
+		
+	}
 
 	private void setUpMap(Address currentAddress) {
+		
+		ArrayList<String> activeDataPrefs = this.settingsHandler.getActiveObstacleList();
 		
 		Double radius = this.settingsHandler.getRadius();
 		radius = radius / 1000;
@@ -163,52 +239,22 @@ public class MainActivity extends ActionBarActivity {
 		this.mapHandler.addMarker("Home", latitude, longitude, R.drawable.icon_home, this.buildDescription(currentAddress));
 		this.mapHandler.zoomToLocation(latitude, longitude);
 		
-		if(this.settingsHandler.isIncludeMusicschool()){
-			ConcreteObstacleHandler<Musicschool> musikschuleHandler = new ConcreteObstacleHandler<Musicschool>(mapHandler, Musicschool.class);
-			musikschuleHandler.setQuery("ch_zh_musikschule", latitude, longitude, radius);
-			new GenericAPICall(musikschuleHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludeKindergarden()){
-			ConcreteObstacleHandler<Kindergarden> kindergartenHandler = new ConcreteObstacleHandler<Kindergarden>(mapHandler, Kindergarden.class);
-			kindergartenHandler.setQuery("ch_zh_kindergarten", latitude, longitude, radius);
-			new GenericAPICall(kindergartenHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludeSchools()){
-			ConcreteObstacleHandler<School> schuleHandler = new ConcreteObstacleHandler<School>(mapHandler, School.class);
-			schuleHandler.setQuery("ch_zh_volksschule", latitude, longitude, radius);
-			new GenericAPICall(schuleHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludeRecycling()){
-			ConcreteObstacleHandler<Recycling> sammelstelleHandler = new ConcreteObstacleHandler<Recycling>(mapHandler, Recycling.class);
-			sammelstelleHandler.setQuery("ch_zh_sammelstelle", latitude, longitude, radius);
-			new GenericAPICall(sammelstelleHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludePlayground()){
-			ConcreteObstacleHandler<Playground> spielplatzHandler = new ConcreteObstacleHandler<Playground>(mapHandler, Playground.class);
-			spielplatzHandler.setQuery("ch_zh_spielplaetze", latitude, longitude, radius);
-			new GenericAPICall(spielplatzHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludeParks()){
-			ConcreteObstacleHandler<Park> parkHandler = new ConcreteObstacleHandler<Park>(mapHandler, Park.class);
-			parkHandler.setQuery("ch_zh_park", latitude, longitude, radius);
-			new GenericAPICall(parkHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludeTenniscourt()){
-			ConcreteObstacleHandler<Tenniscourt> tenniscourtHandler = new ConcreteObstacleHandler<Tenniscourt>(mapHandler, Tenniscourt.class);
-			tenniscourtHandler.setQuery("ch_zh_tennisplatz", latitude, longitude, radius);
-			new GenericAPICall(tenniscourtHandler).executeAPICall();
-		}
-		
-		if(this.settingsHandler.isIncludeSwimmingpool()){
-			ConcreteObstacleHandler<Swimmingpool> swimmingpoolHandler = new ConcreteObstacleHandler<Swimmingpool>(mapHandler, Swimmingpool.class);
-			swimmingpoolHandler.setQuery("ch_zh_hallenbad", latitude, longitude, radius);
-			new GenericAPICall(swimmingpoolHandler).executeAPICall();
+		for(String activeDataEntry : activeDataPrefs){
+			
+			ConcreteObstacleHandler<? extends Result> obstacleHandler = null;
+			String query = null;
+			
+			Map<ConcreteObstacleHandler<? extends Result>,String> obstacleHandlerMap = this.obstacleHandlerMap.get(activeDataEntry);
+			
+			for (Map.Entry<ConcreteObstacleHandler<? extends Result>,String> mapEntry : obstacleHandlerMap.entrySet())
+			{
+				obstacleHandler = mapEntry.getKey();
+				query = mapEntry.getValue();
+			}
+			
+			obstacleHandler.setQuery(query, latitude, longitude, radius);
+			
+			new GenericAPICall(obstacleHandler).executeAPICall();
 		}
 	}
 	
