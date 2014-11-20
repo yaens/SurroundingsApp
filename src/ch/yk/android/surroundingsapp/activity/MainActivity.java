@@ -24,12 +24,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import ch.yk.android.surroundingsapp.R;
+import ch.yk.android.surroundingsapp.businessobject.Daycare;
 import ch.yk.android.surroundingsapp.businessobject.Footballplace;
 import ch.yk.android.surroundingsapp.businessobject.Kindergarden;
 import ch.yk.android.surroundingsapp.businessobject.Musicschool;
 import ch.yk.android.surroundingsapp.businessobject.Nursery;
 import ch.yk.android.surroundingsapp.businessobject.Park;
 import ch.yk.android.surroundingsapp.businessobject.Playground;
+import ch.yk.android.surroundingsapp.businessobject.Police;
+import ch.yk.android.surroundingsapp.businessobject.Publictoilet;
 import ch.yk.android.surroundingsapp.businessobject.Recycling;
 import ch.yk.android.surroundingsapp.businessobject.Result;
 import ch.yk.android.surroundingsapp.businessobject.School;
@@ -222,6 +225,25 @@ public class MainActivity extends ActionBarActivity {
 		nurseryHandlerMap.put(new ConcreteObstacleHandler<Nursery>(mapHandler, Nursery.class),"ch_zh_kinderkrippe");
 		this.obstacleHandlerMap.put("pref_key_importdata_category_family_nursery", nurseryHandlerMap);
 		
+		//Add the Daycare
+		Map<ConcreteObstacleHandler<? extends Result>,String> daycareHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		daycareHandlerMap.put(new ConcreteObstacleHandler<Daycare>(mapHandler, Daycare.class),"ch_zh_kinderhort");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_family_daycare", daycareHandlerMap);
+		
+		//Add the Police
+		Map<ConcreteObstacleHandler<? extends Result>,String> policeHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		policeHandlerMap.put(new ConcreteObstacleHandler<Police>(mapHandler, Police.class),"ch_zh_stadtpolizei");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_service_police", policeHandlerMap);
+		
+		//Add the Toilets
+		Map<ConcreteObstacleHandler<? extends Result>,String> toiletHandlerMap = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		toiletHandlerMap.put(new ConcreteObstacleHandler<Publictoilet>(mapHandler, Publictoilet.class),"ch_zh_zueriwc_nicht_rollstuhlgaengig");
+		toiletHandlerMap.put(new ConcreteObstacleHandler<Publictoilet>(mapHandler, Publictoilet.class),"ch_zh_zueriwc_rollstuhlgaengig");
+		this.obstacleHandlerMap.put("pref_key_importdata_category_service_toilet",toiletHandlerMap );
+		
+		/*Map<ConcreteObstacleHandler<? extends Result>,String>  = new HashMap<ConcreteObstacleHandler<? extends Result>,String>();
+		.put(new ConcreteObstacleHandler<>(mapHandler, .class),"");
+		this.obstacleHandlerMap.put("", );*/
 		
 		
 	}
@@ -250,11 +272,10 @@ public class MainActivity extends ActionBarActivity {
 			{
 				obstacleHandler = mapEntry.getKey();
 				query = mapEntry.getValue();
+				obstacleHandler.setQuery(query, latitude, longitude, radius);
+				
+				new GenericAPICall(obstacleHandler).executeAPICall();
 			}
-			
-			obstacleHandler.setQuery(query, latitude, longitude, radius);
-			
-			new GenericAPICall(obstacleHandler).executeAPICall();
 		}
 	}
 	

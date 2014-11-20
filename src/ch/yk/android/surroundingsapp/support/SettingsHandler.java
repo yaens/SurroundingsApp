@@ -3,8 +3,6 @@ package ch.yk.android.surroundingsapp.support;
 import java.util.ArrayList;
 import java.util.Map;
 
-import ch.yk.android.surroundingsapp.activity.MainActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

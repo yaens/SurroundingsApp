@@ -30,6 +30,7 @@
 	    	<CheckBoxPreference android:key="pref_key_importdata_category_family_musicschool" android:icon="@drawable/icon_musicschool" android:title="Musikschulen"/>
 	    	<CheckBoxPreference android:key="pref_key_importdata_category_family_kindergarden" android:icon="@drawable/icon_kindergarden" android:title="Kindergarten"/>
 	    	<CheckBoxPreference android:title="Kinderkrippe" android:key="pref_key_importdata_category_family_nursery" android:icon="@drawable/icon_nursery"/>
+	    	<CheckBoxPreference android:title="Kinderhort" android:key="pref_key_importdata_category_family_daycare" android:icon="@drawable/icon_daycare"/>
 	    </PreferenceScreen>
 	    <PreferenceScreen
 	        android:key="pref_key_importdata_category_nature"
@@ -44,6 +45,10 @@
 	    	    android:title="Schwimmbäder" />
 	    	<CheckBoxPreference android:title="Fussball" android:key="pref_key_importdata_category_sports_soccer" android:icon="@drawable/icon_soccer"/>
 
+	    </PreferenceScreen>
+	    <PreferenceScreen android:title="Service" android:icon="@drawable/category_icon_service" android:key="pref_key_importdata_category_service">
+	        <CheckBoxPreference android:icon="@drawable/icon_police" android:title="Polizei" android:key="pref_key_importdata_category_service_police"/>
+	        <CheckBoxPreference android:title="Öffentliche Toiletten" android:key="pref_key_importdata_category_service_toilet" android:icon="@drawable/icon_toilets"/>
 	    </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>
